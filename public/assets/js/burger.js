@@ -2,10 +2,10 @@ $(function() {
     $(".create-form").on("submit", function(event) {
         event.preventDefault();
         var newBurger = {
-            burger_name: $("#newburger").val().trim(),
+            name: $("#burger").val().trim(),
             devoured: 0
         };
-
+        console.log(newBurger);
         $.ajax("/api/burgers", {
             type: "POST",
             data: newBurger
@@ -14,30 +14,24 @@ $(function() {
             location.reload();
         });
     });
-    $(".eatburger").on("click", function(event) {
-        event.preventDefault();
 
+
+    $(".eat").on("click", function(event) {
+        event.preventDefault();
         var id = $(this).data("id");
+        var newDevoured = $(this).data("newDevoured") === false;
         var devouredState = {
-            devoured: 1
+            devoured: newDevoured
         };
-        $.ajax("/api/burgers", +id, {
+        console.log('id:' + id);
+        console.log('devoured:' + devouredState.devoured);
+
+        $.ajax("/api/burgers" + id, {
             type: "PUT",
             data: devouredState
         }).then(function() {
             console.log("Burger devoured");
             location.reload();
         })
-    });
-
-    $(".trashburger").on("click", function(event) {
-        event.preventDefault();
-        var id = $(this).data("id");
-
-        //Send the DELETE request.
-        $.ajax({
-            type: "DELETE",
-            url: "/api/burgers/" + id
-        }).then(location.reload());
     });
 });

@@ -16,8 +16,8 @@ function objToSql(obj) {
     for (var key in obj) {
         var value = obj[key];
         if (Object.hasOwnProperty.call(obj, key)) {
-            if (typeof value === "string" && value.indexOf("") >= 0) {
-                value = " ' " + value + " ' ";
+            if (typeof value === "string" && value.indexOf(" ") >= 0) {
+                value = "'" + value + "'";
             }
             arr.push(key + "=" + value);
         }
@@ -39,9 +39,9 @@ var orm = {
     insertOne: function(table, cols, vals, cb) {
         var queryString = "INSERT INTO " + table;
 
-        queryString += "(";
+        queryString += " (";
         queryString += cols.toString();
-        queryString += ")";
+        queryString += ") ";
         queryString += "VALUES (";
         queryString += printQuestionMarks(vals.length);
         queryString += ")";
@@ -58,7 +58,7 @@ var orm = {
 
     updateOne: function(table, objColVals, condition, cb) {
         var queryString = "UPDATE " + table;
-        queryString += "SET";
+        queryString += " SET ";
         queryString += objToSql(objColVals);
         queryString += " WHERE ";
         queryString += condition;
@@ -70,7 +70,7 @@ var orm = {
             }
             cb(results);
         });
-    },
+    }
 };
 
 module.exports = orm;
