@@ -4,36 +4,56 @@
 <h1>Eat-Your-Burger</h1>
 
 <div class="row">
-<div class= "col-4">
-<h2>To be devoured!</h2>
-<ul>
-  {{#each burgers}}
-      {{#unless eaten}}
-    {{> burger-block devour=false}}
-        {{/unless}}
-  {{/each}}
-</ul>
-</div>
-<div class= "col-4"></div>
-<div class= "col-4">
-<h2>Devoured!</h2>
-<ul>
-  {{#each burgers}}
-      {{#if eaten}}
-    {{> burger-block devour=true}}
-        {{/if}}
-  {{/each}}
-</ul>
-</div>
+    <div class="col-4">
+        <h2>To be devoured!</h2>
+        <ul class="list-group">
+          {{#each burgers}}
+              {{#unless this.devoured}}
+            {{> burger_block devour=false}}
+            <li class="list-group-item">
+                <div class="input-group">
+                  <p class="lead">{{this.burger_name}}</p>
+                  <span class="input-group-btn">
+                    <form action="burgers/update/{{this.id}}?_method=PUT" method="POST">
+                      <input type="hidden" name="devoured" value="true">
+                      <button class="btn btn-default btn-lg" type="submit">Devour it!</button>
+                    </form>
+                  </span>
+                </div>
+              </li>
+                {{/unless}}
+          {{/each}}
+        </ul>
+    </div>
 </div>
 
-<form class="create-form">
-
-  <div class="form-group">
-    <label for="burger">Burger Name:</label>
-    <input type="text" id="burger" name="name">
-    <button class = "btn btn-primary" type="submit">Add New Burger</button>
+<div class="row">
+  <div class="col-4">
+    <h2>Devoured!</h2>
+    <div class="panel panel-default">
+        <ul class="list-group">
+          {{#each burgers}}
+              {{#if this.devoured}}
+            {{> burger_block devour=true}}
+            <li class="list-group-item">
+					 	<p class="lead">{{this.burger_name}}</p>
+					 </li>
+                {{/if}}
+          {{/each}}
+        </ul>
+    </div>
   </div>
+</div>
 
-</form>
+<div class="col-10">
+		<p class="lead create-form"><label for="burger">add burger & click submit</label></p>
+		
+		<form class="create-update-form" action="burgers/create" method="POST">
+		 <div class="form-group">
+		 	<textarea class="form-control input-lg" type="text" name="burger_name" row="3"></textarea>
+		 </div>
+		 <button id="burger" class="btn btn-default btn-lg" type="submit">Submit</button>
+		</form>
+	</div>
+
 </div>
